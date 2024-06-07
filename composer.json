@@ -1,0 +1,6 @@
+{
+  "name": "slattery/yse_menu_plugins",
+  "description": "plugs.",
+  "type": "drupal-custom-module",
+  "license": "GPL-2.0-or-later"
+}

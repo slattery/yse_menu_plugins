@@ -1,0 +1,6 @@
+name: YSE Menu Plugins
+type: module
+description: Plugins for menus
+core_version_requirement: '^9 || ^10'
+package: YSE WebOps
+

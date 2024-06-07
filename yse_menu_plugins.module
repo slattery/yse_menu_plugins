@@ -1,0 +1,71 @@
+<?php
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Session\AccountInterface;
+
+/**
+ * Implements hook_help().
+ */
+function yse_menu_plugins_help($route_name, RouteMatchInterface $route_match) {
+  if ($route_name == 'help.page.yse_menu_plugins') {
+    $text = file_get_contents(__DIR__ . '/README.md');
+    if (!Drupal::moduleHandler()->moduleExists('markdown')) {
+      return '<pre>' . $text . '</pre>';
+    }
+    else {
+      /** @var \Drupal\markdown\PluginManager\ParserManagerInterface $parser_manager */
+      $parser_manager = \Drupal::service('plugin.manager.markdown.parser');
+      $parser = $parser_manager->getDefaultParser([
+        'render_strategy' => ['type' => 'none'],
+      ]);
+      return $parser->parse($text);
+    }
+  }
+  return NULL;
+}
+
+
+
+/**
+ * Implements hook_menu_access().
+ *
+ * Checks if the current user has the permission to edit or delete a menu.
+ */
+function yse_menu_plugins_menu_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
+  if ($operation === 'update' && $account->hasPermission('administer menu')) {
+    return AccessResult::allowed();
+  }
+
+  if ($operation === 'delete' && $account->hasPermission('administer menu')) {
+    return AccessResult::allowed();
+  }
+
+  return AccessResult::forbidden();
+}
+
+/**
+ * Implements hook_menu_link_content_access().
+ *
+ * Checks if the current user has the permission to edit or delete menu link
+ * items in the menu.
+ */
+function yse_menu_plugins_menu_link_content_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
+  // The view operation is needed for entity autocomplete.
+  // See https://www.drupal.org/project/simple_menu_permissions/issues/3088822
+  // for more information.
+  if ($operation === 'view') {
+    return AccessResult::allowed();
+  }
+
+  if ($operation === 'update' && $account->hasPermission('administer menu')) {
+    return AccessResult::allowed();
+  }
+
+  if ($operation === 'delete' && $account->hasPermission('administer menu')) {
+    return AccessResult::allowed();
+  }
+
+  return AccessResult::forbidden();
+}
