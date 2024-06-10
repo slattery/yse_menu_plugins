@@ -74,6 +74,14 @@ class AliasLookupMenuLink extends MenuLinkDefault {
     return $gennedurl;
   }
 
+  public function getCacheMaxAge() {
+    return 0;
+  }
+
+  public function getCacheContexts() {
+    return [];
+  }
+
   protected function dispatchParamGetters($a) {
     // assuming single arg!
     $reformed = [];
